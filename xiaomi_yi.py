@@ -55,7 +55,6 @@ class XiaomiYi:
         self._timeout = timeout
 
         self.__token = None
-        self.__timeout = timeout
         self.__control = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         
 
@@ -76,7 +75,7 @@ class XiaomiYi:
         return self.__token
 
     def connect(self):
-        self.__control.settimeout(self.__timeout)
+        self.__control.settimeout(self._timeout)
         self.__control.connect((self._ip, self._port))
 
         self.send({"msg_id": 257, "token": 0}, True)
