@@ -1,9 +1,3 @@
-# xiaomi-yi-py
-Library to control your Xiaomi Yi using Python.
- 
-## Sample usage
-
-```
 #!/usr/bin/python3
 from time import sleep
 
@@ -50,25 +44,3 @@ if __name__ == "__main__":
 
 	# Close connection.
 	camera.close()
-```
-
-## Requirements
-
-Python 3+.  
-
-## Notes
-
-Default password for Yi´s Wi-Fi is `1234567890`.
-Default connection values for my camera are:
-```
-IP: 192.168.42.1
-PORT: 7878
-```
-But if for some reason yours are different you can easily override them:
-```   
-camera = XiaomiYi(ip="192.168.42.1", port=7878, timeout=5)
-```
-
-## Contributing
-
-There are many commands for Yi, those are only basics for shooting and recording, so every contributor is welcomed! :)
