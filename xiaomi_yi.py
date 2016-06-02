@@ -1,9 +1,14 @@
 #!/usr/bin/python3
 import json
 import socket
+
 from time import sleep, perf_counter
 
 REST = 3
+
+class NotConnected(Exception):
+    def __init__(self, error):
+        self.error = error
 
 class XiaomiYi:
     """
@@ -56,8 +61,10 @@ class XiaomiYi:
 
         self.__token = None
         self.__control = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        
 
+    def __repr__(self):
+        return "XiaomiYi('{}', {}, {})".format(self._ip, self._port, self._timeout)
+        
     def send(self, data, connect=False):
         """
         There needs to be little delay after every command,
@@ -68,7 +75,7 @@ class XiaomiYi:
             self.__control.send(bytes(json.dumps(data), 'UTF-8'))
             if not connect: sleep(REST)
         else:
-            raise LookupError("Make connection with object.connect() first.")
+            raise NotConnected("Make connection with object.connect() first.")
 
     def token(self):
         # print("Your token is: ", __token)
@@ -97,6 +104,7 @@ class XiaomiYi:
         self.send({"msg_id": 514, "token": self.__token})
 
     def seq_photos(self, every, until=False):
+        # "every" needs to be at least "REST" seconds.
         if every < REST: every = REST
 
         begin = perf_counter()
@@ -111,9 +119,9 @@ class XiaomiYi:
 
         self.send({"msg_id": 259, "token": self.__token, "param": "none_force"})
         while True:
-            sleep(1)
             if until and (until < perf_counter() - begin):
                 break
+            sleep(REST)
 
         return json(self.__control.recv(512).decode("utf-8"))
 
